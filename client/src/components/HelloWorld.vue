@@ -22,7 +22,7 @@
               <v-card-text>
                 <v-layout row wrap class="player-cards">
                   <v-flex xs4>
-                    <v-card>
+                    <v-card class="player-card">
                       <v-card-text>
                         <v-layout row wrap>
                           <v-flex xs4>
@@ -33,26 +33,28 @@
                               <img src="https://randomuser.me/api/portraits/women/12.jpg" alt="avatar">
                             </v-avatar>
                           </v-flex>
-                          <v-flex xs8>
-                            {{match.homePlayers[0].name}}
+                          <v-flex class="player-name-container" xs8>
+                            <p>{{match.homePlayers[0].name}}</p>
+                            <p><img src="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg" alt="flag" width="20"></p>
                           </v-flex>
                         </v-layout>
                       </v-card-text>
                     </v-card>
                   </v-flex>
                   <v-flex xs4>
-                    <v-card>
+                    <v-card class="player-card">
                       <v-card-text>
                         {{match.referee.name}}
                       </v-card-text>
                     </v-card>
                   </v-flex>
                   <v-flex xs4>
-                    <v-card>
+                    <v-card class="player-card">
                       <v-card-text>
                         <v-layout row wrap>
-                          <v-flex xs8>
-                            {{match.awayPlayers[0].name}}
+                          <v-flex class="player-name-container" xs8>
+                            <p>{{match.awayPlayers[0].name}}</p>
+                            <p><img src="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg" alt="flag" width="20"></p>
                           </v-flex>
                           <v-flex xs4>
                             <v-avatar
@@ -191,5 +193,22 @@ li {
 }
 .player-cards .player-profile-picture{
   width: 100%;
+}
+.player-cards .player-profile-picture>img{
+  border:1px solid #fff;
+}
+.player-cards .player-name-container{
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+.player-cards .player-name-container>p{
+  margin: 0px;
+  font-size: 1.5em;
+  font-weight: 100;
+  color: #fff;
+}
+.player-cards .player-card{
+  background-color: #212121d4;
 }
 </style>
