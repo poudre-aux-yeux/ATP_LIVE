@@ -1,0 +1,6 @@
+query AllMatches {
+	matches {
+		id
+		label
+	}
+}

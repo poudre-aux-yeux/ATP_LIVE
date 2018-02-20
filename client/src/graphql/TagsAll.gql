@@ -1,6 +1,0 @@
-query TagsAll ($type: String!) {
-	tags (type: $type) {
-		id
-		label
-	}
-}

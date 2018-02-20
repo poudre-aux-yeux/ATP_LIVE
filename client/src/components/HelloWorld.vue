@@ -1,14 +1,81 @@
 <template>
   <v-container>
-    <div class="hello">
-      <h1>Welcome to my vue.js app !</h1>
-      <input type="text" v-model="newTag"/>
-      <button @click="addTag">Click to send</button>
-      <ul v-if="tags.length > 0">
-        <li v-for="tag in tags" :key="tag.id">
-          {{tag.id}} - {{tag.label}}
-        </li>
-      </ul>
+    <div class="matches">
+      <v-container
+        fluid
+        style="min-height: 0;"
+        grid-list-lg
+        v-if="matches.length > 0"
+      >
+        <v-layout row wrap>
+          <v-flex xs12 v-for="match in matches" :key="match.id">
+            <v-card class="white--text match-card">
+              <v-card-title primary-title class="match-card-title">
+                <div class="stadium-headline">
+                  <p class="stadium">
+                    <span class="stadium-name">{{match.stadium.name}}</span>,
+                    <span class="stadium-city"> {{match.stadium.city}}</span>
+                    <span class="stadium-surface">{{match.stadium.surface}}</span>
+                  </p>
+                </div>
+              </v-card-title>
+              <v-card-text>
+                <v-layout row wrap class="player-cards">
+                  <v-flex xs4>
+                    <v-card>
+                      <v-card-text>
+                        <v-layout row wrap>
+                          <v-flex xs4>
+                            <v-avatar
+                              class="player-profile-picture grey lighten-4"
+                              size="auto"
+                            >
+                              <img src="https://randomuser.me/api/portraits/women/12.jpg" alt="avatar">
+                            </v-avatar>
+                          </v-flex>
+                          <v-flex xs8>
+                            {{match.homePlayers[0].name}}
+                          </v-flex>
+                        </v-layout>
+                      </v-card-text>
+                    </v-card>
+                  </v-flex>
+                  <v-flex xs4>
+                    <v-card>
+                      <v-card-text>
+                        {{match.referee.name}}
+                      </v-card-text>
+                    </v-card>
+                  </v-flex>
+                  <v-flex xs4>
+                    <v-card>
+                      <v-card-text>
+                        <v-layout row wrap>
+                          <v-flex xs8>
+                            {{match.awayPlayers[0].name}}
+                          </v-flex>
+                          <v-flex xs4>
+                            <v-avatar
+                              class="player-profile-picture grey lighten-4"
+                              size="auto"
+                            >
+                              <img src="https://randomuser.me/api/portraits/women/72.jpg" alt="avatar">
+                            </v-avatar>
+                          </v-flex>
+                        </v-layout>
+                      </v-card-text>
+                    </v-card>
+                  </v-flex>
+                </v-layout>
+                <div>Listen to your favorite artists and albums whenever and wherever, online and offline.</div>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn flat dark>WATCH now</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
       <p v-else>Chargement ...</p>
     </div>
   </v-container>
@@ -17,58 +84,46 @@
 <script>
 // import { mapGetters, mapActions } from 'vuex'
 import gql from 'graphql-tag'
-import TAGS_QUERY from '../graphql/TagsAll.gql'
+// import MATCHES_QUERY from '../graphql/Matches.gql'
 
 export default {
   name: 'HelloWorld',
   data () {
     return {
-      tags: [],
+      matches: [],
       type: 'Company',
       newTag: ''
     }
   },
-  methods: {
-    addTag () {
-      // We save the user input in case of an error
-      const newTag = this.newTag
-      // We clear it early to give the UI a snappy feel
-      this.newTag = ''
-      // Call to the graphql mutation
-      this.$apollo.mutate({
-        // Query
-        mutation: gql`mutation ($label: String!, $type: String!) {
-          addTag(label: $label, type: $type) {
-            id
-            label
-            type
-          }
-        }`,
-        // Parameters
-        variables: {
-          label: newTag,
-          type: this.type
-        }
-      }).then((data) => {
-        // Result
-        console.log(data)
-      }).catch((error) => {
-        // Error
-        console.error(error)
-        // We restore the initial user input
-        this.newTag = newTag
-      })
-    }
-  },
   apollo: {
-    tags: {
-      query: TAGS_QUERY,
-      variables () {
+    matches: gql`{matches{
+    id
+    date
+    homePlayers{
+      id
+      name
+    }
+    awayPlayers{
+      id
+      name
+    }
+    referee{
+      id
+      name
+    }
+    stadium{
+      id
+      name
+      city
+      surface
+    }
+  }}`
+    /* variables () {
         return {
           type: this.type
         }
-      },
-      subscribeToMore: {
+      } */
+    /* subscribeToMore: {
         document: gql`subscription name($type: String!) {
           tagAdded(type: $type) {
             id
@@ -85,23 +140,22 @@ export default {
         // Mutate the previous result
         updateQuery: (previousResult, { subscriptionData }) => {
           // Here, return the new result from the previous with the new data
-          if (previousResult.tags.find(tag => tag.id === subscriptionData.data.tagAdded.id)) {
+          if (previousResult.matches.find(match => match.id === subscriptionData.data.matchAdded.id)) {
             return previousResult
           }
           return {
-            tags: [
-              ...previousResult.tags,
+            matches: [
+              ...previousResult.matches,
               // Add the new tag
               subscriptionData.data.tagAdded
             ]
           }
         },
-        update ({ tags }) {
+        update ({ matches }) {
           // The field is different from 'tasks'
-          return tags
+          return matches
         }
-      }
-    }
+      } */
   }
 }
 </script>
@@ -119,7 +173,23 @@ li {
   display: inline-block;
   margin: 0 10px;
 }
-a {
-  color: #42b983;
+.match-card-title{
+  background: #212121d4;
+  padding: 5px;
+}
+.matches .match-card{
+    background-image: url("https://ds1.static.rtbf.be/image/media/object/default/16x9/1248x702/9/c/3/9c35f94dfc54658177dd177cbe08827c.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+}
+.stadium-headline .stadium {
+  margin: 0px;
+}
+.player-cards{
+  border-bottom: 1px solid white;
+}
+.player-cards .player-profile-picture{
+  width: 100%;
 }
 </style>

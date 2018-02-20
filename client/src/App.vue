@@ -5,13 +5,13 @@
       </v-container>
       <v-app v-else>
         <v-navigation-drawer v-model="drawer" absolute clipped app></v-navigation-drawer>
-        <v-toolbar clipped-left color="login" dark fixed app>
+        <v-toolbar clipped-left color="mattemonred" dark fixed app>
           <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
         </v-toolbar>
         <v-content app>
             <router-view></router-view>
         </v-content>
-        <v-footer color="login" dark fixed app></v-footer>
+        <v-footer color="mattemonred" dark fixed app></v-footer>
       </v-app>
   </v-app>
 </template>

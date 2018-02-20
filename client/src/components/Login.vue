@@ -13,7 +13,7 @@
                     name="login"
                     label="Identifiant"
                     id="input-login"
-                    color="login"
+                    color="mattemonred"
                   ></v-text-field>
                 </v-flex>
                 <v-flex md12>
@@ -22,11 +22,11 @@
                     name="password"
                     label="Mot de passe"
                     id="input-password"
-                    color="login"
+                    color="mattemonred"
                   ></v-text-field>
                 </v-flex>
                 <v-flex md6 offset-md6>
-                  <v-btn @click="connect" color="login">Se connecter</v-btn>
+                  <v-btn @click="connect" color="mattemonred">Se connecter</v-btn>
                 </v-flex>
               </v-layout>
             </v-container>

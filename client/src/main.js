@@ -9,9 +9,9 @@ import VueApollo from 'vue-apollo'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import { split } from 'apollo-link'
-import { WebSocketLink } from 'apollo-link-ws'
-import { getMainDefinition } from 'apollo-utilities'
+// import { split } from 'apollo-link'
+// import { WebSocketLink } from 'apollo-link-ws'
+// import { getMainDefinition } from 'apollo-utilities'
 
 import router from './router'
 import store from './store'
@@ -20,20 +20,20 @@ import('../node_modules/vuetify/dist/vuetify.css')
 
 const httpLink = new HttpLink({
   // You should use an absolute URL here
-  uri: 'http://localhost:3020/graphql/'
+  uri: 'http://localhost:3333/graphql'
 })
 
 // Create the subscription websocket link
-const wsLink = new WebSocketLink({
-  uri: 'ws://localhost:3020/subscriptions',
+/* const wsLink = new WebSocketLink({
+  uri: 'ws://localhost:3333/graphql',
   options: {
     reconnect: true
   }
-})
+}) */
 
 // using the ability to split links, you can send data to each link
 // depending on what kind of operation is being sent
-const link = split(
+/* const link = split(
   // split based on operation type
   ({ query }) => {
     const { kind, operation } = getMainDefinition(query)
@@ -42,11 +42,11 @@ const link = split(
   },
   wsLink,
   httpLink
-)
+) */
 
 // Create the apollo client
 const apolloClient = new ApolloClient({
-  link,
+  link: httpLink,
   cache: new InMemoryCache(),
   connectToDevTools: true
 })
@@ -55,7 +55,8 @@ const apolloClient = new ApolloClient({
 Vue.use(VueApollo)
 Vue.use(Vuetify, {
   theme: {
-    login: '#ff5252'
+    mattemonred: '#c52b2b',
+    mattemonblack: '#333'
   }
 })
 
