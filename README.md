@@ -10,7 +10,7 @@ Once you've cloned the repository, go in the directory :
 
 `cd ATP_LIVE/client/`
 
-Then you can install the dependancies :
+Then you can install the dependencies :
 
 ``` bash
 # With yarn
