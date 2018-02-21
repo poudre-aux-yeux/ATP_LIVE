@@ -42,9 +42,10 @@
                     </v-card>
                   </v-flex>
                   <v-flex xs4>
-                    <v-card class="player-card">
-                      <v-card-text>
-                        {{match.referee.name}}
+                    <v-card class="player-card" height="100%">
+                      <v-card-text class="referee-card-text">
+                        <p class="versus">VS</p>
+                        <p>Arbitré par : {{match.referee.name}}</p>
                       </v-card-text>
                     </v-card>
                   </v-flex>
@@ -54,7 +55,7 @@
                         <v-layout row wrap>
                           <v-flex class="player-name-container" xs8>
                             <p>{{match.awayPlayers[0].name}}</p>
-                            <p><img src="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg" alt="flag" width="20"></p>
+                            <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/2000px-Flag_of_Germany.svg.png" alt="flag" width="20"></p>
                           </v-flex>
                           <v-flex xs4>
                             <v-avatar
@@ -69,7 +70,6 @@
                     </v-card>
                   </v-flex>
                 </v-layout>
-                <div>Listen to your favorite artists and albums whenever and wherever, online and offline.</div>
               </v-card-text>
               <v-card-actions>
                 <v-btn flat dark>WATCH now</v-btn>
@@ -201,6 +201,7 @@ li {
   align-items: center;
   justify-content: center;
   display: flex;
+  flex-direction: column;
 }
 .player-cards .player-name-container>p{
   margin: 0px;
@@ -210,5 +211,21 @@ li {
 }
 .player-cards .player-card{
   background-color: #212121d4;
+}
+.player-cards .player-card .referee-card-text>p{
+  color: white;
+  margin: 0px;
+}
+.player-cards .player-card .referee-card-text>p.versus{
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #c52b2c;
+}
+.player-cards .player-card .referee-card-text{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 </style>
