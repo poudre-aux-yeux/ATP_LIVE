@@ -15,7 +15,7 @@
                   <p class="stadium">
                     <span class="stadium-name">{{match.stadium.name}}</span>,
                     <span class="stadium-city"> {{match.stadium.city}}</span>
-                    <span class="stadium-surface">{{match.stadium.surface}}</span>
+                    <span class="stadium-surface">{{stadetypes[match.stadium.surface]}}</span>
                   </p>
                 </div>
               </v-card-title>
@@ -71,7 +71,7 @@
                                   'score-container':true,
                                   win:(set.away > 5 && set.away > set.home)
                                 }"
-                                v-for="set in sets"
+                                v-for="set in reversedSets"
                                 :key="set.id"
                                 xs2>
                                 <p>{{set.away}}</p>
@@ -123,8 +123,8 @@ export default {
       sets: [
         {
           id: 1,
-          home: 6,
-          away: 2
+          home: 3,
+          away: 6
         },
         {
           id: 2,
@@ -133,10 +133,19 @@ export default {
         },
         {
           id: 3,
-          home: 6,
-          away: 4
+          home: 8,
+          away: 6
         }
-      ]
+      ],
+      stadetypes: {
+        clay: 'Terre battue'
+      }
+    }
+  },
+  computed: {
+    reversedSets () {
+      let unreversed = [...this.sets]
+      return unreversed.reverse()
     }
   },
   apollo: {
@@ -206,8 +215,17 @@ li {
     background-size: cover;
     background-position: 50% 50%;
 }
+.stadium-headline{
+  width: 100%;
+}
 .stadium-headline .stadium {
   margin: 0px;
+}
+.stadium .stadium-surface{
+  background: #8e3a0e;
+  padding: 5px;
+  border-radius: 4px;
+  float: right;
 }
 .player-cards{
   border-bottom: 1px solid white;
@@ -237,6 +255,9 @@ li {
 }
 .scores .score-container.win{
   background: #5a8e5c;
+}
+.scores .score-container>p{
+  margin: 0px;
 }
 .player-cards .player-profile-picture-container{
   justify-content: center;
