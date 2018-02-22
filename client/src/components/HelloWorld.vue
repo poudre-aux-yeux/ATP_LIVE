@@ -21,11 +21,11 @@
               </v-card-title>
               <v-card-text>
                 <v-layout row wrap class="player-cards">
-                  <v-flex xs4>
-                    <v-card class="player-card">
+                  <v-flex xs5>
+                    <v-card class="player-card player-left">
                       <v-card-text>
                         <v-layout row wrap>
-                          <v-flex xs4>
+                          <v-flex xs2 class="player-profile-picture-container">
                             <v-avatar
                               class="player-profile-picture grey lighten-4"
                               size="auto"
@@ -33,31 +33,56 @@
                               <img src="https://randomuser.me/api/portraits/women/12.jpg" alt="avatar">
                             </v-avatar>
                           </v-flex>
-                          <v-flex class="player-name-container" xs8>
+                          <v-flex class="player-name-container" xs3>
                             <p>{{match.homePlayers[0].name}}</p>
-                            <p><img src="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg" alt="flag" width="20"></p>
+                            <img src="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg" alt="flag" width="20">
+                          </v-flex>
+                          <v-flex xs7>
+                            <v-layout row wrap class="scores">
+                              <v-flex :class="{
+                                  'score-container':true,
+                                  win:(set.home > 5 && set.home > set.away)
+                                }"
+                                v-for="set in sets"
+                                :key="set.id"
+                                xs2>
+                                <p>{{set.home}}</p>
+                              </v-flex>
+                            </v-layout>
                           </v-flex>
                         </v-layout>
                       </v-card-text>
                     </v-card>
                   </v-flex>
-                  <v-flex xs4>
+                  <v-flex x2>
                     <v-card class="player-card" height="100%">
                       <v-card-text class="referee-card-text">
                         <p class="versus">VS</p>
-                        <p>Arbitré par : {{match.referee.name}}</p>
                       </v-card-text>
                     </v-card>
                   </v-flex>
-                  <v-flex xs4>
-                    <v-card class="player-card">
+                  <v-flex xs5>
+                    <v-card class="player-card player-right">
                       <v-card-text>
                         <v-layout row wrap>
-                          <v-flex class="player-name-container" xs8>
-                            <p>{{match.awayPlayers[0].name}}</p>
-                            <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/2000px-Flag_of_Germany.svg.png" alt="flag" width="20"></p>
+                          <v-flex xs7>
+                            <v-layout row wrap class="scores">
+                              <v-flex :class="{
+                                  'score-container':true,
+                                  win:(set.away > 5 && set.away > set.home)
+                                }"
+                                v-for="set in sets"
+                                :key="set.id"
+                                xs2>
+                                <p>{{set.away}}</p>
+                              </v-flex>
+                            </v-layout>
                           </v-flex>
-                          <v-flex xs4>
+                          <v-flex class="player-name-container" xs3>
+                            <p>{{match.awayPlayers[0].name}}</p>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/2000px-Flag_of_Germany.svg.png" alt="flag" width="20">
+                          </v-flex>
+                          <v-flex xs2 class="player-profile-picture-container">
                             <v-avatar
                               class="player-profile-picture grey lighten-4"
                               size="auto"
@@ -85,8 +110,8 @@
 
 <script>
 // import { mapGetters, mapActions } from 'vuex'
-import gql from 'graphql-tag'
-// import MATCHES_QUERY from '../graphql/Matches.gql'
+// import gql from 'graphql-tag'
+import AllMatches from '../graphql/Matches.gql'
 
 export default {
   name: 'HelloWorld',
@@ -94,32 +119,28 @@ export default {
     return {
       matches: [],
       type: 'Company',
-      newTag: ''
+      newTag: '',
+      sets: [
+        {
+          id: 1,
+          home: 6,
+          away: 2
+        },
+        {
+          id: 2,
+          home: 5,
+          away: 7
+        },
+        {
+          id: 3,
+          home: 6,
+          away: 4
+        }
+      ]
     }
   },
   apollo: {
-    matches: gql`{matches{
-    id
-    date
-    homePlayers{
-      id
-      name
-    }
-    awayPlayers{
-      id
-      name
-    }
-    referee{
-      id
-      name
-    }
-    stadium{
-      id
-      name
-      city
-      surface
-    }
-  }}`
+    matches: AllMatches
     /* variables () {
         return {
           type: this.type
@@ -176,7 +197,7 @@ li {
   margin: 0 10px;
 }
 .match-card-title{
-  background: #212121d4;
+  background: #00000061;
   padding: 5px;
 }
 .matches .match-card{
@@ -191,6 +212,37 @@ li {
 .player-cards{
   border-bottom: 1px solid white;
 }
+.matches .player-cards .player-card .scores {
+  height: 100%;
+  margin: 0;
+}
+.player-left .scores {
+  justify-content: flex-end;
+}
+.scores .score-container{
+  background: #212121;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.scores .score-container:first-child{
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+.scores .score-container:last-child{
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+.scores .score-container.win{
+  background: #5a8e5c;
+}
+.player-cards .player-profile-picture-container{
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
 .player-cards .player-profile-picture{
   width: 100%;
 }
@@ -198,16 +250,24 @@ li {
   border:1px solid #fff;
 }
 .player-cards .player-name-container{
-  align-items: center;
   justify-content: center;
   display: flex;
   flex-direction: column;
 }
+.player-cards .player-left .player-name-container{
+  align-items: flex-start;
+}
+.player-cards .player-right .player-name-container{
+  align-items: flex-end;
+}
 .player-cards .player-name-container>p{
   margin: 0px;
-  font-size: 1.5em;
+  font-size: 1.5vw;
   font-weight: 100;
   color: #fff;
+}
+.player-cards .player-name-container>img{
+  padding-top: 8px;
 }
 .player-cards .player-card{
   background-color: #212121d4;
@@ -215,6 +275,7 @@ li {
 .player-cards .player-card .referee-card-text>p{
   color: white;
   margin: 0px;
+  text-align: center;
 }
 .player-cards .player-card .referee-card-text>p.versus{
   font-size: 1.5em;

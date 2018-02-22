@@ -1,6 +1,24 @@
 query AllMatches {
-	matches {
-		id
-		label
-	}
+	matches{
+    id
+    date
+    homePlayers{
+      id
+      name
+    }
+    awayPlayers{
+      id
+      name
+    }
+    referee{
+      id
+      name
+    }
+    stadium{
+      id
+      name
+      city
+      surface
+    }
+  }
 }
