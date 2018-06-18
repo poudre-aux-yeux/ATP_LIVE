@@ -35,6 +35,9 @@ export default {
 </script>
 
 <style>
+html .application{
+  font-family: 'Maven Pro', sans-serif;
+}
 .login-container{
   background-image: url("https://images.pexels.com/photos/209977/pexels-photo-209977.jpeg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb");
   background-size: cover;

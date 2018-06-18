@@ -5,10 +5,12 @@ query AllMatches {
     homePlayers{
       id
       name
+      image
     }
     awayPlayers{
       id
       name
+      image
     }
     referee{
       id

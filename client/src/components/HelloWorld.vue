@@ -8,7 +8,8 @@
         v-if="matches.length > 0"
       >
         <v-layout row wrap>
-          <v-flex xs12 v-for="match in matches" :key="match.id">
+          <v-flex xs6 v-for="match in matches" :key="match.id">
+            <div>{{formatDate(match.date)}}</div>
             <v-card class="white--text match-card">
               <v-card-title primary-title class="match-card-title">
                 <div class="stadium-headline">
@@ -21,7 +22,7 @@
               </v-card-title>
               <v-card-text>
                 <v-layout row wrap class="player-cards">
-                  <v-flex xs5>
+                  <v-flex xs10>
                     <v-card class="player-card player-left">
                       <v-card-text>
                         <v-layout row wrap>
@@ -30,7 +31,7 @@
                               class="player-profile-picture grey lighten-4"
                               size="auto"
                             >
-                              <img src="https://randomuser.me/api/portraits/women/12.jpg" alt="avatar">
+                              <img ref="homePlayerImage" :src="match.homePlayers[0].image" alt="avatar">
                             </v-avatar>
                           </v-flex>
                           <v-flex class="player-name-container" xs3>
@@ -41,9 +42,10 @@
                             <v-layout row wrap class="scores">
                               <v-flex :class="{
                                   'score-container':true,
-                                  win:(set.home > 5 && set.home > set.away)
+                                  win:(set.home > 5 && set.home > set.away),
+                                  current:(index==sets.length-1)
                                 }"
-                                v-for="set in sets"
+                                v-for="(set, index) in sets"
                                 :key="set.id"
                                 xs2>
                                 <p>{{set.home}}</p>
@@ -53,52 +55,52 @@
                         </v-layout>
                       </v-card-text>
                     </v-card>
-                  </v-flex>
-                  <v-flex x2>
-                    <v-card class="player-card" height="100%">
-                      <v-card-text class="referee-card-text">
-                        <p class="versus">VS</p>
-                      </v-card-text>
-                    </v-card>
-                  </v-flex>
-                  <v-flex xs5>
                     <v-card class="player-card player-right">
                       <v-card-text>
                         <v-layout row wrap>
+                          <v-flex xs2 class="player-profile-picture-container">
+                            <v-avatar
+                              class="player-profile-picture grey lighten-4"
+                              size="auto"
+                            >
+                              <img :src="match.awayPlayers[0].image" alt="avatar">
+                            </v-avatar>
+                          </v-flex>
+                           <v-flex class="player-name-container" xs3>
+                            <p>{{match.awayPlayers[0].name}}</p>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/2000px-Flag_of_Germany.svg.png" alt="flag" width="20">
+                          </v-flex>
                           <v-flex xs7>
                             <v-layout row wrap class="scores">
                               <v-flex :class="{
                                   'score-container':true,
-                                  win:(set.away > 5 && set.away > set.home)
+                                  win:(set.away > 5 && set.away > set.home),
+                                  current:(index==sets.length-1)
                                 }"
-                                v-for="set in reversedSets"
+                                v-for="(set, index) in sets"
                                 :key="set.id"
                                 xs2>
                                 <p>{{set.away}}</p>
                               </v-flex>
                             </v-layout>
                           </v-flex>
-                          <v-flex class="player-name-container" xs3>
-                            <p>{{match.awayPlayers[0].name}}</p>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/2000px-Flag_of_Germany.svg.png" alt="flag" width="20">
-                          </v-flex>
-                          <v-flex xs2 class="player-profile-picture-container">
-                            <v-avatar
-                              class="player-profile-picture grey lighten-4"
-                              size="auto"
-                            >
-                              <img src="https://randomuser.me/api/portraits/women/72.jpg" alt="avatar">
-                            </v-avatar>
-                          </v-flex>
                         </v-layout>
+                      </v-card-text>
+                    </v-card>
+                  </v-flex>
+                  <v-flex xs2>
+                    <v-card class="player-card" height="100%">
+                      <v-card-text class="referee-card-text service-right">
+                        <p class="versus">
+                          15
+                          <span class="versus-logo">vs</span>
+                          30
+                        </p>
                       </v-card-text>
                     </v-card>
                   </v-flex>
                 </v-layout>
               </v-card-text>
-              <v-card-actions>
-                <v-btn flat dark>WATCH now</v-btn>
-              </v-card-actions>
             </v-card>
           </v-flex>
         </v-layout>
@@ -138,7 +140,7 @@ export default {
         }
       ],
       stadetypes: {
-        clay: 'Terre battue'
+        CLAY: 'Terre battue'
       }
     }
   },
@@ -146,6 +148,12 @@ export default {
     reversedSets () {
       let unreversed = [...this.sets]
       return unreversed.reverse()
+    }
+  },
+  methods: {
+    formatDate (date) {
+      let d = new Date(date)
+      return d.getDate() + '/' + d.getMonth() + '/' + d.getFullYear()
     }
   },
   apollo: {
@@ -210,10 +218,10 @@ li {
   padding: 5px;
 }
 .matches .match-card{
-    background-image: url("https://ds1.static.rtbf.be/image/media/object/default/16x9/1248x702/9/c/3/9c35f94dfc54658177dd177cbe08827c.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: 50% 50%;
+  background-image: url("https://ds1.static.rtbf.be/image/media/object/default/16x9/1248x702/9/c/3/9c35f94dfc54658177dd177cbe08827c.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50% 50%;
 }
 .stadium-headline{
   width: 100%;
@@ -227,14 +235,12 @@ li {
   border-radius: 4px;
   float: right;
 }
-.player-cards{
-  border-bottom: 1px solid white;
-}
 .matches .player-cards .player-card .scores {
   height: 100%;
   margin: 0;
 }
-.player-left .scores {
+.player-left .scores,
+.player-right .scores {
   justify-content: flex-end;
 }
 .scores .score-container{
@@ -244,6 +250,7 @@ li {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 .scores .score-container:first-child{
   border-top-left-radius: 5px;
@@ -252,6 +259,23 @@ li {
 .scores .score-container:last-child{
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
+}
+.scores .score-container.current::before{
+  position: absolute;
+  content: close-quote;
+  width: 8px;
+  height: 8px;
+  border-bottom: 2px solid white;
+  border-right: 2px solid white;
+  transform-origin: 50% 50%;
+  transform: rotate(45deg);
+}
+.player-right .scores .score-container.current::before{
+  transform: rotate(-135deg);
+  animation: float-bottom 1.2s ease-in-out infinite;
+}
+.player-left .scores .score-container.current::before{
+  animation: float-top 1.2s ease-in-out infinite;
 }
 .scores .score-container.win{
   background: #5a8e5c;
@@ -266,24 +290,33 @@ li {
 }
 .player-cards .player-profile-picture{
   width: 100%;
+  padding-top: 100%;
 }
 .player-cards .player-profile-picture>img{
   border:1px solid #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
 }
 .player-cards .player-name-container{
   justify-content: center;
   display: flex;
   flex-direction: column;
 }
-.player-cards .player-left .player-name-container{
+.player-cards .player-left .player-name-container,
+.player-cards .player-right .player-name-container{
   align-items: flex-start;
 }
-.player-cards .player-right .player-name-container{
-  align-items: flex-end;
+.player-cards .player-right{
+  margin-top: 5px;
 }
 .player-cards .player-name-container>p{
   margin: 0px;
-  font-size: 1.5vw;
+  font-size: 1.8vw;
   font-weight: 100;
   color: #fff;
 }
@@ -299,9 +332,12 @@ li {
   text-align: center;
 }
 .player-cards .player-card .referee-card-text>p.versus{
-  font-size: 1.5em;
+  font-size: 1.5vw;
   font-weight: bold;
-  color: #c52b2c;
+}
+.player-cards .player-card .referee-card-text>p.versus>span{
+  color:#c52b2b;
+  margin: 5px;
 }
 .player-cards .player-card .referee-card-text{
   display: flex;
@@ -309,5 +345,51 @@ li {
   justify-content: center;
   align-items: center;
   height: 100%;
+}
+.card__text.referee-card-text::before, .card__text.referee-card-text::after{
+  content: close-quote;
+  position: absolute;
+  width: 17px;
+  height: 17px;
+  -webkit-mask: url("../assets/tennis-ball.svg") no-repeat;
+  -webkit-mask-size: cover;
+  mask: url("../assets/tennis-ball.svg") no-repeat;
+  mask-size: cover;
+}
+.card__text.referee-card-text::before{
+  top: 10px;
+}
+.card__text.referee-card-text::after{
+  bottom: 10px;
+}
+.card__text.referee-card-text.service-left::before, .card__text.referee-card-text.service-right::after{
+  background-color: #ffd000;
+}
+.card__text.referee-card-text.service-left::after, .card__text.referee-card-text.service-right::before{
+  background-color: #616161;
+}
+
+@keyframes float-top {
+  from {
+    top:-11px;
+  }
+  50%{
+    top:-17px;
+  }
+  to {
+    top:-11px;
+  }
+}
+
+@keyframes float-bottom {
+  from {
+    bottom:-11px;
+  }
+  50%{
+    bottom:-17px;
+  }
+  to {
+    bottom:-11px;
+  }
 }
 </style>
